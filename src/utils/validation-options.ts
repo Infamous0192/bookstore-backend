@@ -25,7 +25,7 @@ const validationOptions: ValidationPipeOptions = {
   exceptionFactory: (errors: ValidationError[]) => {
     return new HttpException(
       {
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        message: 'Invalid Payload',
         errors: generateErrors(errors),
       },
       HttpStatus.UNPROCESSABLE_ENTITY,

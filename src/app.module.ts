@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { DatabaseConfigService } from './database/database-config.service';
+import { TagModule } from './modules';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { DatabaseConfigService } from './database/database-config.service';
         return new DataSource(options).initialize();
       },
     }),
+    TagModule,
   ],
 })
 export class AppModule {}
