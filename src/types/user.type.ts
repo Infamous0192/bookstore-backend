@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
+import { Book } from './book.type';
 
 export class User {
   @ApiProperty({ type: Number })
@@ -19,6 +20,9 @@ export class User {
 
   @ApiProperty()
   point: number;
+
+  @ApiProperty()
+  books: Book[];
 
   @ApiProperty()
   createdAt?: Date;

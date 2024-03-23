@@ -8,11 +8,44 @@ import {
 import { GeneralResponse, PaginatedResult } from 'src/types';
 
 export const ApiGeneralResponse = <DataDto extends Type<unknown>>(
-  dataDto?: DataDto,
+  dataDto?: DataDto | DataDto[],
   status = 200,
-) =>
-  applyDecorators(
-    ApiExtraModels(GeneralResponse, dataDto),
+) => {
+  if (!dataDto) {
+    return applyDecorators(
+      ApiExtraModels(GeneralResponse),
+      ApiResponse({
+        status,
+      }),
+    );
+  }
+
+  if (Array.isArray(dataDto)) {
+    return applyDecorators(
+      ApiExtraModels(PaginatedResult, dataDto[0]),
+      ApiOkResponse({
+        schema: {
+          allOf: [
+            { $ref: getSchemaPath(PaginatedResult) },
+            {
+              properties: {
+                result: {
+                  type: 'array',
+                  items: { $ref: getSchemaPath(dataDto[0]) },
+                },
+              },
+            },
+          ],
+        },
+      }),
+    );
+  }
+
+  return applyDecorators(
+    ApiExtraModels(
+      GeneralResponse,
+      Array.isArray(dataDto) ? dataDto[0] : dataDto,
+    ),
     ApiResponse({
       status,
       schema: {
@@ -30,6 +63,7 @@ export const ApiGeneralResponse = <DataDto extends Type<unknown>>(
       },
     }),
   );
+};
 
 export const ApiPaginatedResponse = <DataDto extends Type<unknown>>(
   dataDto: DataDto,

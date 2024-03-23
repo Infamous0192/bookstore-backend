@@ -1,14 +1,19 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { UserRepository } from 'src/repositories';
-import { User } from 'src/types';
+import { Book, User } from 'src/types';
 import { PaginatedResult } from 'src/types';
 import { UserDTO, UserQuery } from 'src/dto';
 import bcrypt from 'bcrypt';
 import { EntityCondition } from 'src/utils/types';
+import { BookService } from './book.service';
+import { In } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly bookService: BookService,
+  ) {}
 
   async findOne(fields: EntityCondition<User>): Promise<User> {
     const user = await this.userRepository.findOne(fields);
@@ -35,6 +40,7 @@ export class UserService {
     user.point = data.point;
     user.role = data.role;
     user.username = data.username;
+    user.books = [];
 
     const salt = await bcrypt.genSalt();
     user.password = await bcrypt.hash(data.password, salt);
@@ -50,6 +56,45 @@ export class UserService {
     user.point = data.point;
     user.role = data.role;
     user.password = data.password;
+
+    return await this.userRepository.save(user);
+  }
+
+  async getBook(id: User['id']): Promise<Book[]> {
+    const user = await this.findOne({ id });
+
+    return user.books;
+  }
+
+  async addBook(id: User['id'], bookId: Book['id']): Promise<User> {
+    const user = await this.findOne({ id });
+    const book = await this.bookService.findOne(bookId);
+    const bookIds = [...new Set([...user.books.map(({ id }) => id), book.id])];
+    if (user.books.length == bookIds.length) {
+      throw new HttpException({ message: `You already have this book` }, 400);
+    }
+
+    if (book.price > user.point) {
+      throw new HttpException({ message: `You don't have enough point` }, 400);
+    }
+
+    user.point -= book.price;
+    user.books = await this.bookService.findAll({ id: In(bookIds) });
+
+    return await this.userRepository.save(user);
+  }
+
+  async removeBook(id: User['id'], bookId: Book['id']): Promise<User> {
+    const user = await this.findOne({ id });
+    const book = await this.bookService.findOne(bookId);
+
+    const bookIds = user.books.map(({ id }) => id).filter((v) => v !== book.id);
+    if (user.books.length == bookIds.length) {
+      throw new HttpException({ message: `You don't have this book` }, 400);
+    }
+
+    user.point += book.price;
+    user.books = await this.bookService.findAll({ id: In(bookIds) });
 
     return await this.userRepository.save(user);
   }

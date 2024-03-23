@@ -58,6 +58,9 @@ export class UserRepository {
   async findOne(fields: EntityCondition<User>): Promise<NullableType<User>> {
     return await this.userRepository.findOne({
       where: fields as FindOptionsWhere<UserEntity>,
+      relations: {
+        books: true,
+      },
     });
   }
 

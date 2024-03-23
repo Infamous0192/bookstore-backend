@@ -20,6 +20,12 @@ export class BookRepository {
     return await this.bookRepository.save(this.bookRepository.create(book));
   }
 
+  async findAll(fields: FindOptionsWhere<BookEntity>) {
+    return await this.bookRepository.find({
+      where: fields as FindOptionsWhere<BookEntity>,
+    });
+  }
+
   async findMany(query: BookQuery): Promise<PaginatedResult<Book>> {
     const {
       order = 'desc',

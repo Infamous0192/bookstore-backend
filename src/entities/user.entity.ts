@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { User } from 'src/types';
+import { Book, User } from 'src/types';
 import {
   Column,
   CreateDateColumn,
@@ -7,7 +7,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   BaseEntity,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
+import { BookEntity } from './book.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity implements User {
@@ -30,6 +33,10 @@ export class UserEntity extends BaseEntity implements User {
   @Column({ type: Number, nullable: true })
   point: number | null;
 
+  @ManyToMany(() => BookEntity)
+  @JoinTable({ name: 'user_books' })
+  books: Book[];
+
   @CreateDateColumn()
   createdAt?: Date;
 
@@ -47,6 +54,7 @@ export class UserEntity extends BaseEntity implements User {
     this.password = user.password;
     this.role = user.role;
     this.point = user.point;
+    this.books = user.books;
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
   }
@@ -58,6 +66,7 @@ export class UserEntity extends BaseEntity implements User {
       password: this.password,
       point: this.point,
       role: this.role,
+      books: this.books,
       username: this.username,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,

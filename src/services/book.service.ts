@@ -5,6 +5,8 @@ import { PaginatedResult } from 'src/types';
 import { BookDTO, BookQuery } from 'src/dto';
 import { FileService } from './file.service';
 import { TagService } from './tag.service';
+import { FindOptionsWhere } from 'typeorm';
+import { BookEntity } from 'src/entities';
 
 @Injectable()
 export class BookService {
@@ -25,6 +27,10 @@ export class BookService {
 
   async findMany(query: BookQuery): Promise<PaginatedResult<Book>> {
     return await this.bookRepository.findMany(query);
+  }
+
+  async findAll(fields: FindOptionsWhere<BookEntity>): Promise<Book[]> {
+    return await this.bookRepository.findAll(fields);
   }
 
   async create(data: BookDTO): Promise<Book> {

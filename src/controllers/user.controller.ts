@@ -15,6 +15,7 @@ import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiParam,
+  ApiResponse,
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
@@ -22,6 +23,7 @@ import { UserDTO, UserQuery } from 'src/dto';
 import { AuthGuard } from 'src/guards';
 import { UserService } from 'src/services';
 import {
+  Book,
   ErrorResponse,
   GeneralResponse,
   PaginatedResult,
@@ -66,7 +68,7 @@ export class UserController {
     type: String,
     required: true,
   })
-  @ApiGeneralResponse(User)
+  @ApiResponse({ type: User })
   @ApiBadRequestResponse({ type: ErrorResponse })
   async findOne(@Param('id') id: User['id']): Promise<User> {
     return await this.userService.findOne({ id });
@@ -108,6 +110,71 @@ export class UserController {
 
     return {
       message: 'User deleted successfully',
+    };
+  }
+
+  @Get(':userId/book')
+  @HttpCode(HttpStatus.OK)
+  @ApiParam({
+    name: 'userId',
+    type: String,
+    required: true,
+  })
+  @ApiResponse({ type: [Book] })
+  @ApiBadRequestResponse({ type: ErrorResponse })
+  async getBook(@Param('userId') userId: User['id']): Promise<Book[]> {
+    const books = await this.userService.getBook(userId);
+
+    return books;
+  }
+
+  @Put(':userId/book/:bookId')
+  @HttpCode(HttpStatus.OK)
+  @ApiParam({
+    name: 'userId',
+    type: String,
+    required: true,
+  })
+  @ApiParam({
+    name: 'bookId',
+    type: String,
+    required: true,
+  })
+  @ApiGeneralResponse()
+  @ApiBadRequestResponse({ type: ErrorResponse })
+  async addBook(
+    @Param('userId') userId: User['id'],
+    @Param('bookId') bookId: Book['id'],
+  ): Promise<GeneralResponse<User>> {
+    await this.userService.addBook(userId, bookId);
+
+    return {
+      message: 'Book added to collection',
+    };
+  }
+
+  @Delete(':userId/book/:bookId')
+  @HttpCode(HttpStatus.OK)
+  @ApiParam({
+    name: 'userId',
+    type: String,
+    required: true,
+  })
+  @ApiParam({
+    name: 'bookId',
+    type: String,
+    required: true,
+  })
+  @ApiGeneralResponse()
+  @ApiBadRequestResponse({ type: ErrorResponse })
+  async removeBook(
+    @Param('userId') userId: User['id'],
+    @Param('bookId') bookId: Book['id'],
+  ): Promise<GeneralResponse<User>> {
+    await this.userService.removeBook(userId, bookId);
+
+    return {
+      message: 'Book removed from collection',
     };
   }
 }
