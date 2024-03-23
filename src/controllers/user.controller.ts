@@ -9,14 +9,17 @@ import {
   HttpStatus,
   HttpCode,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiParam,
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { UserDTO, UserQuery } from 'src/dto';
+import { AuthGuard } from 'src/guards';
 import { UserService } from 'src/services';
 import {
   ErrorResponse,
@@ -27,6 +30,8 @@ import {
 import { ApiGeneralResponse, ApiPaginatedResponse } from 'src/utils/decorators';
 
 @ApiTags('Users')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller({
   path: 'users',
 })
@@ -64,7 +69,7 @@ export class UserController {
   @ApiGeneralResponse(User)
   @ApiBadRequestResponse({ type: ErrorResponse })
   async findOne(@Param('id') id: User['id']): Promise<User> {
-    return await this.userService.findOne(id);
+    return await this.userService.findOne({ id });
   }
 
   @Put(':id')

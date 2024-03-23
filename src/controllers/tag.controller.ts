@@ -9,14 +9,17 @@ import {
   HttpStatus,
   HttpCode,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiParam,
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { TagDTO, TagQuery } from 'src/dto';
+import { AuthGuard } from 'src/guards';
 import { TagService } from 'src/services';
 import {
   ErrorResponse,
@@ -27,6 +30,7 @@ import {
 import { ApiGeneralResponse, ApiPaginatedResponse } from 'src/utils/decorators';
 
 @ApiTags('Tags')
+@ApiBearerAuth()
 @Controller({
   path: 'tags',
 })
@@ -37,6 +41,7 @@ export class TagController {
   @HttpCode(HttpStatus.CREATED)
   @ApiGeneralResponse(Tag, HttpStatus.CREATED)
   @ApiBadRequestResponse({ type: ErrorResponse })
+  @UseGuards(AuthGuard)
   async create(@Body() data: TagDTO): Promise<GeneralResponse<Tag>> {
     const tag = await this.tagService.create(data);
 
@@ -77,6 +82,7 @@ export class TagController {
   @ApiGeneralResponse(Tag)
   @ApiBadRequestResponse({ type: ErrorResponse })
   @ApiUnprocessableEntityResponse({ type: ErrorResponse })
+  @UseGuards(AuthGuard)
   async update(
     @Param('id') id: Tag['id'],
     @Body() data: TagDTO,
@@ -98,6 +104,7 @@ export class TagController {
   @HttpCode(HttpStatus.OK)
   @ApiGeneralResponse(Tag)
   @ApiBadRequestResponse({ type: ErrorResponse })
+  @UseGuards(AuthGuard)
   async remove(@Param('id') id: Tag['id']): Promise<GeneralResponse> {
     await this.tagService.delete(id);
 

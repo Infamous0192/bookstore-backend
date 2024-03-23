@@ -9,14 +9,17 @@ import {
   HttpStatus,
   HttpCode,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiParam,
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { BookDTO, BookQuery } from 'src/dto';
+import { AuthGuard } from 'src/guards';
 import { BookService } from 'src/services';
 import {
   ErrorResponse,
@@ -27,6 +30,7 @@ import {
 import { ApiGeneralResponse, ApiPaginatedResponse } from 'src/utils/decorators';
 
 @ApiTags('Books')
+@ApiBearerAuth()
 @Controller({
   path: 'books',
 })
@@ -37,6 +41,7 @@ export class BookController {
   @HttpCode(HttpStatus.CREATED)
   @ApiGeneralResponse(Book, HttpStatus.CREATED)
   @ApiBadRequestResponse({ type: ErrorResponse })
+  @UseGuards(AuthGuard)
   async create(@Body() data: BookDTO): Promise<GeneralResponse<Book>> {
     const book = await this.bookService.create(data);
 
@@ -77,6 +82,7 @@ export class BookController {
   @ApiGeneralResponse(Book)
   @ApiBadRequestResponse({ type: ErrorResponse })
   @ApiUnprocessableEntityResponse({ type: ErrorResponse })
+  @UseGuards(AuthGuard)
   async update(
     @Param('id') id: Book['id'],
     @Body() data: BookDTO,
@@ -98,6 +104,7 @@ export class BookController {
   @HttpCode(HttpStatus.OK)
   @ApiGeneralResponse(Book)
   @ApiBadRequestResponse({ type: ErrorResponse })
+  @UseGuards(AuthGuard)
   async remove(@Param('id') id: Book['id']): Promise<GeneralResponse> {
     await this.bookService.delete(id);
 

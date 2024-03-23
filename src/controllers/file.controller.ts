@@ -9,10 +9,12 @@ import {
   HttpCode,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiParam,
@@ -21,6 +23,7 @@ import {
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { FileQuery, FileUploadDTO } from 'src/dto';
+import { AuthGuard } from 'src/guards';
 import { FileService } from 'src/services';
 import {
   ErrorResponse,
@@ -31,6 +34,7 @@ import {
 import { ApiGeneralResponse, ApiPaginatedResponse } from 'src/utils/decorators';
 
 @ApiTags('Files')
+@ApiBearerAuth()
 @Controller({
   path: 'files',
 })
@@ -57,6 +61,7 @@ export class FileController {
   @ApiBody({ type: FileUploadDTO })
   @ApiGeneralResponse(File, HttpStatus.CREATED)
   @ApiBadRequestResponse({ type: ErrorResponse })
+  @UseGuards(AuthGuard)
   async create(
     @UploadedFile() file: Express.Multer.File,
   ): Promise<GeneralResponse<File>> {
