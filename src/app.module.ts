@@ -5,7 +5,9 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { DatabaseConfigService } from './database/database-config.service';
-import { TagModule } from './modules';
+import { FileModule, TagModule } from './modules';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -20,7 +22,12 @@ import { TagModule } from './modules';
         return new DataSource(options).initialize();
       },
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      exclude: ['/api/(.*)'],
+    }),
     TagModule,
+    FileModule,
   ],
 })
 export class AppModule {}
