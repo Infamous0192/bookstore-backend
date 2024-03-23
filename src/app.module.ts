@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { DatabaseConfigService } from './database/database-config.service';
-import { BookModule, FileModule, TagModule } from './modules';
+import { BookModule, FileModule, TagModule, UserModule } from './modules';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
@@ -29,6 +29,7 @@ import { join } from 'path';
     BookModule,
     TagModule,
     FileModule,
+    UserModule,
   ],
 })
 export class AppModule {}
