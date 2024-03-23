@@ -5,15 +5,22 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { DatabaseConfigService } from './database/database-config.service';
-import { BookModule, FileModule, TagModule, UserModule } from './modules';
+import {
+  AuthModule,
+  BookModule,
+  FileModule,
+  TagModule,
+  UserModule,
+} from './modules';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import authConfig from './config/auth.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [databaseConfig, appConfig],
+      load: [databaseConfig, appConfig, authConfig],
       envFilePath: ['.env'],
     }),
     TypeOrmModule.forRootAsync({
@@ -30,6 +37,7 @@ import { join } from 'path';
     TagModule,
     FileModule,
     UserModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

@@ -4,18 +4,19 @@ import { User } from 'src/types';
 import { PaginatedResult } from 'src/types';
 import { UserDTO, UserQuery } from 'src/dto';
 import bcrypt from 'bcrypt';
+import { EntityCondition } from 'src/utils/types';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async findOne(id: User['id']): Promise<User> {
-    const user = await this.userRepository.findOne({ id });
+  async findOne(fields: EntityCondition<User>): Promise<User> {
+    const user = await this.userRepository.findOne(fields);
     if (!user) {
       throw new HttpException({ message: 'User not found' }, 400);
     }
 
-    return await this.userRepository.findOne({ id });
+    return user;
   }
 
   async findMany(query: UserQuery): Promise<PaginatedResult<User>> {
@@ -42,7 +43,7 @@ export class UserService {
   }
 
   async update(id: User['id'], data: UserDTO): Promise<User> {
-    const user = await this.findOne(id);
+    const user = await this.findOne({ id });
 
     user.name = data.name;
     user.username = data.username;
@@ -54,7 +55,7 @@ export class UserService {
   }
 
   async delete(id: User['id']): Promise<void> {
-    const user = await this.findOne(id);
+    const user = await this.findOne({ id });
     await this.userRepository.delete(user.id);
   }
 }

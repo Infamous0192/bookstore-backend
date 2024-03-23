@@ -4,3 +4,4 @@ export * from './tag.type';
 export * from './pagination.type';
 export * from './response.type';
 export * from './user.type';
+export * from './auth.type';
