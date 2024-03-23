@@ -1,16 +1,32 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { File } from './file.type';
 import { Tag } from './tag.type';
 
-export interface Book {
-  id: number | string;
+export class Book {
+  @ApiProperty({ type: Number })
+  id?: number;
 
+  @ApiProperty()
   title: string;
+
+  @ApiProperty()
   content: string;
+
+  @ApiProperty()
   author: string;
+
+  @ApiProperty()
   price: number;
+
+  @ApiProperty()
   thumbnail: File;
+
+  @ApiProperty()
   tags: Tag[];
 
-  createdAt: Date;
-  updatedAt: Date;
+  @ApiProperty()
+  createdAt?: Date;
+
+  @ApiProperty()
+  updatedAt?: Date;
 }
