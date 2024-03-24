@@ -12,6 +12,9 @@ export class Creds {
 
   @ApiProperty()
   role: string;
+
+  @ApiProperty()
+  point: number;
 }
 
 export class Authorized {
