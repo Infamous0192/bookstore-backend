@@ -15,8 +15,7 @@
     "seed:create:relational": "hygen seeds create-relational",
     "seed:create:document": "hygen seeds create-document",
     "app:config": "ts-node -r tsconfig-paths/register ./.install-scripts/index.ts && npm install",
-    "seed:run:relational": "ts-node -r tsconfig-paths/register ./src/database/seeds/relational/run-seed.ts",
-    "seed:run:document": "ts-node -r tsconfig-paths/register ./src/database/seeds/document/run-seed.ts",
+    "seed:run": "ts-node -r tsconfig-paths/register ./src/database/seeds/run-seed.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -49,6 +48,7 @@
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",

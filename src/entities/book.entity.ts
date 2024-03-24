@@ -8,8 +8,8 @@ import {
   BaseEntity,
   ManyToMany,
   JoinTable,
-  OneToOne,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { FileEntity } from './file.entity';
 import { TagEntity } from './tag.entity';
@@ -35,7 +35,7 @@ export class BookEntity extends BaseEntity implements Book {
   @JoinTable({ name: 'book_tags' })
   tags: Tag[];
 
-  @OneToOne(() => FileEntity)
+  @ManyToOne(() => FileEntity)
   @JoinColumn({ name: 'thumbnailId' })
   thumbnail: File;
 

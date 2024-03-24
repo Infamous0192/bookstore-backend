@@ -5,7 +5,7 @@ export class CreateBooksTable1711164381234 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "books" ("id" SERIAL NOT NULL, "title" character varying, "content" character varying, "author" character varying, "price" integer, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "thumbnailId" integer, CONSTRAINT "REL_0ba77bdd35819a2beed171017e" UNIQUE ("thumbnailId"), CONSTRAINT "PK_f3f2f25a099d24e12545b70b022" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "books" ("id" SERIAL NOT NULL, "title" character varying, "content" character varying, "author" character varying, "price" integer, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "thumbnailId" integer, CONSTRAINT "PK_f3f2f25a099d24e12545b70b022" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "book_tags" ("booksId" integer NOT NULL, "tagsId" integer NOT NULL, CONSTRAINT "PK_859e6cb40504f0ea9edf795ff77" PRIMARY KEY ("booksId", "tagsId"))`,
