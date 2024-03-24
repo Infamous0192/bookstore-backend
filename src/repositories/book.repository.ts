@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookQuery } from 'src/dto';
+import { UserEntity } from 'src/entities';
 import { BookEntity } from 'src/entities/book.entity';
 import { Book } from 'src/types';
 import { PaginatedResult } from 'src/types/pagination.type';
@@ -13,6 +14,8 @@ export class BookRepository {
   constructor(
     @InjectRepository(BookEntity)
     private readonly bookRepository: Repository<BookEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
 
   async create(data: Book): Promise<Book> {
@@ -39,7 +42,22 @@ export class BookRepository {
     }
 
     if (query?.tags) {
-      where.tags = In(query.tags);
+      where.tags = {
+        id: In(query.tags),
+      };
+    }
+
+    if (query.user) {
+      // Assuming you have a many-to-many relationship defined between User and Book entities
+      const user = await this.userRepository.findOne({
+        where: { id: Number(query.user) },
+        relations: { books: true },
+      });
+
+      if (user) {
+        const bookIds = user.books.map((book) => book.id);
+        where.id = In(bookIds);
+      }
     }
 
     const total = await this.bookRepository.count({ where });

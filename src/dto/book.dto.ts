@@ -66,4 +66,9 @@ export class BookQuery {
   @IsString({ each: true })
   @IsOptional()
   tags?: string[];
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  user?: string;
 }
