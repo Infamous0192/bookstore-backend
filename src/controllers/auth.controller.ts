@@ -11,7 +11,7 @@ import {
 import { ApiBadRequestResponse, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoginDTO, RegisterDTO } from 'src/dto';
 import { AuthGuard } from 'src/guards';
-import { AuthService } from 'src/services';
+import { AuthService, UserService } from 'src/services';
 import {
   ErrorResponse,
   GeneralResponse,
@@ -26,7 +26,10 @@ import { ApiGeneralResponse } from 'src/utils/decorators';
   path: 'auth',
 })
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
   @Get('me')
   @HttpCode(HttpStatus.OK)
@@ -35,7 +38,16 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   async validate(@Request() request): Promise<Creds> {
-    return request['user'];
+    const user = await this.userService.findOne({ id: request.user.id });
+
+    return {
+      id: user.id,
+      books: user.books,
+      name: user.name,
+      point: user.point,
+      username: user.username,
+      role: user.role,
+    };
   }
 
   @Post('login')

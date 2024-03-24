@@ -47,6 +47,7 @@ export class AuthService {
       role: user.role,
       username: user.username,
       point: user.point,
+      books: user.books,
     };
 
     return {
@@ -74,10 +75,11 @@ export class AuthService {
       );
     }
 
+    const salt = await bcrypt.genSalt();
     const user = await this.userRepository.create({
       name: data.name,
       username: data.username,
-      password: data.password,
+      password: await bcrypt.hash(data.password, salt),
       point: 100,
       role: 'client',
       books: [],
@@ -89,6 +91,7 @@ export class AuthService {
       role: user.role,
       username: user.username,
       point: user.point,
+      books: user.books,
     };
 
     return {

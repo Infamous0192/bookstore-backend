@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Book } from './book.type';
 
 export class Creds {
   @ApiProperty()
@@ -15,6 +16,9 @@ export class Creds {
 
   @ApiProperty()
   point: number;
+
+  @ApiProperty()
+  books: Book[];
 }
 
 export class Authorized {
