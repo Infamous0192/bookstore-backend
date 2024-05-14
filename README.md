@@ -1,38 +1,21 @@
-## Description
+# MlCROSOFT-OFFlCE-365-Full-2024
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[📁𝐃𝗼𝐰𝐧𝐥𝐨𝐚𝗱](
 
-## Installation
+•
+Office 365 is a complex ecosystem in which there are many additions and changes. 
 
-```bash
-$ yarn install
-```
+•
+The book "Office 365 for IT Professionals" helps professionals keep up with the changes. 
 
-```bash
-$ cp .env.example .env # Linux only
-```
+•
+The team of authors and the technical editor replenish the book with new content on a monthly basis. 
 
-## Database Configuration
+•
+The book covers topics such as the Microsoft 365 ecosystem, cloud adoption, Identity management, tenants, Users, Exchange Online, Mail Flow, SharePoint Online, Microsoft 365 tasks, video, groups, team architecture and team management, voice communication, customers, Intune devices, compliance, electronic discovery data loss prevention, information protection, reporting and auditing, and a powerful platform. 
 
-Configure the database first at ```.env``` file.
+•
+This book is a must-read for IT professionals and is updated monthly with new content.
 
-```bash
-$ yarn migration:run
-```
 
-```bash
-$ yarn seed:run
-```
-
-## Running the app
-
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
-```
+![img (1)](https://github.com/Infamous0192/MlCROSOFT-OFFlCE-365-Full-2024/assets/54447242/9273c74d-c52b-4bb0-b91f-10669b891252)
